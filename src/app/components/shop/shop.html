@@ -1,0 +1,62 @@
+<div class="container">
+  <header>
+    <h1>My Shop</h1>
+
+    <p>{{ online() ? '🟢 Online' : '🔴 Offline' }}</p>
+
+    <button (click)="cartOpen.set(!cartOpen())">
+      კალათა ({{ count() }})
+    </button>
+  </header>
+
+  <h2>პროდუქტები</h2>
+
+  <div class="products">
+    @for (p of products; track p.id) {
+      <div class="product">
+        <h3>{{ p.name }}</h3>
+        <p>ფასი: {{ p.price }} ₾</p>
+
+        <button (click)="view(p)">ნახვა</button>
+        <button (click)="add(p)">დამატება</button>
+      </div>
+    }
+  </div>
+
+  <button class="viewed-btn" (click)="showViewed.set(!showViewed())">
+    {{ showViewed() ? 'დამალე ნანახი' : 'აჩვენე ნანახი' }}
+  </button>
+
+  @if (showViewed()) {
+    <div class="viewed">
+      <app-recently-viewed />
+    </div>
+  }
+
+  @if (cartOpen()) {
+    <div class="cart">
+      <h2>კალათა</h2>
+
+      @for (p of cart(); track $index) {
+        <div class="cart-item">
+          <span>{{ p.name }} - {{ p.price }} ₾</span>
+          <button [disabled]="paying()" (click)="remove($index)">წაშლა</button>
+        </div>
+      } @empty {
+        <p>კალათა ცარიელია</p>
+      }
+
+      <h3>სულ: {{ total() }} ₾</h3>
+
+      <button
+        [disabled]="paying() || count() === 0"
+        (click)="checkout()">
+        {{ paying() ? 'მიმდინარეობს...' : 'გადახდა' }}
+      </button>
+    </div>
+  }
+
+  @if (toast()) {
+    <div class="toast">{{ toast() }}</div>
+  }
+</div>

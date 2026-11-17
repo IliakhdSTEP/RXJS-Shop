@@ -1,0 +1,8 @@
+
+<h3>ბოლოს ნანახი</h3>
+
+@for (p of items(); track $index) {
+  <p>{{ p.name }}</p>
+} @empty {
+  <p>ჯერ არაფერი გინახავს</p>
+}
